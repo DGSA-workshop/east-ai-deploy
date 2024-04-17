@@ -4,7 +4,7 @@ mkdir /root/east-ai-deploy/
 cd /root/east-ai-deploy/
 wget https://bootstrap.pypa.io/get-pip.py
 python3 get-pip.py
-git clone https://github.com/aws-east-ai/east-ai-deploy.git
+git clone https://github.com/DGSA-workshop/east-ai-deploy.git
 yes | cp -rf east-ai-deploy/dist/east-ai-ui/* /usr/share/nginx/html/
 yes | cp -rf east-ai-deploy/templates/nginx.conf /etc/nginx/nginx.conf
 systemctl start nginx
