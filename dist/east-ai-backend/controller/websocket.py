@@ -1,6 +1,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import json
 import boto3
+import logging
 import os
 from utils.bot import claude2_bot, claude3_bot, mistral7b_bot
 
@@ -31,6 +32,7 @@ patterns = {
 
 @ws_router.websocket("/api/chat-bot")
 async def chat_bot(websocket: WebSocket):
+    logging.info("Calling chat_bot.....")
     await websocket.accept()
     try:
         while True:
@@ -38,6 +40,7 @@ async def chat_bot(websocket: WebSocket):
 
             # TODO: error handle，如果不是 json 格式则会报错
             # print(data)
+            logging.info("Received data from frontend: {}", data)
             item = json.loads(data)
             model_id = item["model_id"] if "model_id" in item else "chatglm2"
 

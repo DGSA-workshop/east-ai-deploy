@@ -84,7 +84,7 @@ Resources:
       - AppServerRole
     Type: "AWS::EC2::Instance"
     Properties:
-      InstanceType: "r6i.xlarge"
+      InstanceType: "t3.large"
       ImageId: !FindInMap [ AWSRegionArch2AMI, !Ref 'AWS::Region', HVM64]
       IamInstanceProfile: !Ref AppServerInstanceProfile
       NetworkInterfaces:

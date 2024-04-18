@@ -1,4 +1,5 @@
 import json
+import logging
 
 
 async def claude2_bot(bedrock, websocket, prompt: str, history):
@@ -35,6 +36,7 @@ async def claude2_bot(bedrock, websocket, prompt: str, history):
 
 
 async def claude3_bot(bedrock, websocket, prompt: str, history):
+    logging.info("Invoking claude3 model....")
     accept = "*/*"
     contentType = "application/json"
     modelId = "anthropic.claude-3-sonnet-20240229-v1:0"
@@ -79,12 +81,8 @@ async def claude3_bot(bedrock, websocket, prompt: str, history):
 
 
 async def mistral7b_bot(bedrock, websocket, prompt: str, history):
-    accept = "*/*"
-    contentType = "application/json"
+    logging.info("Invoking mistral7b model....")
     modelId = "mistral.mistral-7b-instruct-v0:2"
-    # Mistral instruct models provide optimal results when
-    # embedding the prompt into the following template:
-    # instruction = f"<s>[INST] {prompt} [/INST]"
 
     body = json.dumps(
         {
@@ -101,7 +99,6 @@ async def mistral7b_bot(bedrock, websocket, prompt: str, history):
     response_body = json.loads(response.get('body').read())
     outputs = response_body.get("outputs")
     completions = [output["text"] for output in outputs]
-    print("completions:", completions)
     await websocket.send_text(completions)
 
     result_end = '{"status": "done"}'
@@ -116,7 +113,9 @@ def claude_combine_history(history, newQ):
     for [q, a] in history:
         prompt = prompt + "Human:{q}\\n\\nAssistant:{a}\\n\\n".format(q=q, a=a)
     prompt = prompt + "Human:{prompt} \\n\\nAssistant:".format(prompt=newQ)
-    print(prompt)
+    logging.info("%%%%%%%%%%%%%%%%%%%%%%%%%")
+    logging.info("generating claude prompt: {}", prompt)
+    logging.info("%%%%%%%%%%%%%%%%%%%%%%%%%")
     return prompt
 
 
@@ -129,7 +128,7 @@ def mistral_combine_history(history, newQ):
         prompt = prompt + ("<s>[INST] {q} [/INST]"
                            "{a}").format(q=q, a=a)
     prompt = prompt + "<s>[INST] {prompt} [/INST]".format(prompt=newQ)
-    print("%%%%%%%%%%%%%%")
-    print(prompt)
-    print("%%%%%%%%%%%%%%")
+    logging.info("%%%%%%%%%%%%%%%%%%%%%%%%%")
+    logging.info("generating mistral prompt: {}", prompt)
+    logging.info("%%%%%%%%%%%%%%%%%%%%%%%%%")
     return prompt
