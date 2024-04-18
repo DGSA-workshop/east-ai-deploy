@@ -116,7 +116,7 @@ def claude_combine_history(history, newQ):
     for [q, a] in history:
         prompt = prompt + "Human:{q}\\n\\nAssistant:{a}\\n\\n".format(q=q, a=a)
     prompt = prompt + "Human:{prompt} \\n\\nAssistant:".format(prompt=newQ)
-    # print(prompt)
+    print(prompt)
     return prompt
 
 
