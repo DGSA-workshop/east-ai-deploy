@@ -62,6 +62,7 @@ async def chat_bot(websocket: WebSocket):
                 # await ask_bedrock_claude2(websocket, prompt, history)
                 await claude3_bot(bedrock, websocket, prompt, history)
             elif model_id == "mistral_7b":
+                await websocket.send_text("Connecting to mistral_7b")
                 await mistral7b_bot(bedrock, websocket, prompt, history)
     except WebSocketDisconnect:
         print(f"Client left")

@@ -81,6 +81,7 @@ async def claude3_bot(bedrock, websocket, prompt: str, history):
 
 
 async def mistral7b_bot(bedrock, websocket, prompt: str, history):
+    await websocket.send_text("mistral7b_bot")
     logging.info("Invoking mistral7b model....")
     modelId = "mistral.mistral-7b-instruct-v0:2"
 
@@ -95,7 +96,7 @@ async def mistral7b_bot(bedrock, websocket, prompt: str, history):
         body=body,
         modelId=modelId,
     )
-
+    await websocket.send_text("responded!!")
     response_body = json.loads(response.get('body').read())
     outputs = response_body.get("outputs")
     completions = [output["text"] for output in outputs]
