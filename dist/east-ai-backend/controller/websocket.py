@@ -39,7 +39,7 @@ async def chat_bot(websocket: WebSocket):
             data = await websocket.receive_text()
 
             # TODO: error handle，如果不是 json 格式则会报错
-            # print(data)
+            print(data)
             logging.info("Received data from frontend: {}", data)
             item = json.loads(data)
             model_id = item["model_id"] if "model_id" in item else "chatglm2"
@@ -52,7 +52,7 @@ async def chat_bot(websocket: WebSocket):
             prompt = prompt if history else prompt_pattern + "\n\n" + prompt
             question = {"status": "begin", "question": prompt}
             await websocket.send_text(json.dumps(question, ensure_ascii=False))
-
+            print("websocket await....{}", model_id)
             if model_id == "chatglm2":
                 await ask_chatglm2(websocket, prompt, history)
             elif model_id == "bedrock_claude2":
