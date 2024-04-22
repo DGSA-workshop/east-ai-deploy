@@ -98,6 +98,13 @@ async def mistral7b_bot(bedrock, websocket, prompt: str, history):
             modelId=modelId,
         )
         await websocket.send_text("invoked!")
+        response_body = json.loads(response.get('body').read())
+        outputs = response_body.get("outputs")
+        completions = [output["text"] for output in outputs]
+        print("completions:", completions)
+        await websocket.send_text(completions)
+        result_end = '{"status": "done"}'
+        await websocket.send_text(result_end)
     except Exception as error:
         await websocket.send_text("An error occurred:", error)
         response = bedrock.invoke_model(
@@ -105,15 +112,13 @@ async def mistral7b_bot(bedrock, websocket, prompt: str, history):
             modelId=modelId,
         )
         await websocket.send_text("Retry succeeded!")
-
-    await websocket.send_text("responded!!", response)
-    response_body = json.loads(response.get('body').read())
-    outputs = response_body.get("outputs")
-    completions = [output["text"] for output in outputs]
-    await websocket.send_text(completions)
-
-    result_end = '{"status": "done"}'
-    await websocket.send_text(result_end)
+        response_body = json.loads(response.get('body').read())
+        outputs = response_body.get("outputs")
+        completions = [output["text"] for output in outputs]
+        print("completions:", completions)
+        await websocket.send_text(completions)
+        result_end = '{"status": "done"}'
+        await websocket.send_text(result_end)
 
 
 def claude_combine_history(history, newQ):
