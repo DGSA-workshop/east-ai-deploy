@@ -91,12 +91,22 @@ async def mistral7b_bot(bedrock, websocket, prompt: str, history):
             "max_tokens": 5000
         }
     )
+    try:
+        await websocket.send_text("going to invoke")
+        response = bedrock.invoke_model(
+            body=body,
+            modelId=modelId,
+        )
+        await websocket.send_text("invoked!")
+    except Exception as error:
+        await websocket.send_text("An error occurred:", error)
+        response = bedrock.invoke_model(
+            body=body,
+            modelId=modelId,
+        )
+        await websocket.send_text("Retry succeeded!")
 
-    response = bedrock.invoke_model(
-        body=body,
-        modelId=modelId,
-    )
-    await websocket.send_text("responded!!")
+    await websocket.send_text("responded!!", response)
     response_body = json.loads(response.get('body').read())
     outputs = response_body.get("outputs")
     completions = [output["text"] for output in outputs]
