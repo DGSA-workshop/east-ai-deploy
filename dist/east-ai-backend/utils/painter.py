@@ -69,7 +69,11 @@ def product_design(item: dict):
     if height > 1024 or width > 1024:
         return {"error": "height or width must be less than 1024"}
 
-    prompt = translate(get_str(item, "prompt", None))
+    prompt_cn = get_str(item, "prompt", None).split(", ")
+    prompt_cn[1] = translate(prompt_cn[1])
+    prompt = ", ".join(prompt_cn)
+    print("------------------翻译----------------")
+    print(prompt)
 
     negative_prompt = get_str(item, "negative_prompt", None)
 
