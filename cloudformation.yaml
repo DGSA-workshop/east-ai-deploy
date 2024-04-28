@@ -7,15 +7,6 @@ Parameters:
   AppServerSubnet:
     Description: Select a subnet for deployment.
     Type: AWS::EC2::Subnet::Id
-#  BedrockKnowledgebaseId:
-#    Description: Bedrock Knowledge base Id(Optional)
-#    Type: String
-#  GoogleSearchId:
-#    Description: CSE Id(Optional)
-#    Type: String
-#  GoogleSearchAPIKey:
-#    Description: Google Search API Key(Optional)
-#    Type: String
 
 Mappings:
   AWSRegionArch2AMI:
@@ -125,18 +116,12 @@ Resources:
             ACCOUNTID=`curl -H "X-aws-ec2-metadata-token: $TOKEN" -s  http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId`
             aws s3 mb s3://east-ai-workshop-$ACCOUNTID
             export WORKSHOP_IMAGE_BUCKET=east-ai-workshop-$ACCOUNTID
-#            export KNOWLEDGE_BASE_ID=${kb_id}
-#            export GOOGLE_CSE_CX=${cse_id}
-#            export GOOGLE_API_KEY=${goog_key}
             pip3 install -q -r requirements.txt
             pip3 install gunicorn
             gunicorn -k uvicorn.workers.UvicornWorker app:app -w 5 --log-file error.log --access-logfile access.log &
             cd ../../templates/
             chmod +x postinstall.sh
             ./postinstall.sh $ACCOUNTID
-#          - kb_id: !Ref BedrockKnowledgebaseId
-#            cse_id: !Ref GoogleSearchId
-#            goog_key: !Ref GoogleSearchAPIKey
 
 Outputs:
   AppServerIPAddress:
