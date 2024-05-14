@@ -37,9 +37,7 @@ def inpaint(item: dict):
         }
     )
 
-    prompt_cn = get_str(item, "prompt", None).split(", ")
-    prompt_cn[1] = translate(prompt_cn[1])
-    prompt = ", ".join(prompt_cn)
+    prompt = get_str(item, "prompt", None)
     negative_prompt = translate(get_str(item, "negative_prompt", None))
 
     steps = get_int(item, "steps", 30)
@@ -72,8 +70,6 @@ def product_design(item: dict):
     prompt_cn = get_str(item, "prompt", None).split(", ")
     prompt_cn[1] = translate(prompt_cn[1])
     prompt = ", ".join(prompt_cn)
-    print("------------------翻译----------------")
-    print(prompt)
 
     negative_prompt = get_str(item, "negative_prompt", None)
 
